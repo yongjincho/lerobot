@@ -87,7 +87,7 @@ class LeRobotDatasetMetadata:
     ):
         self.repo_id = repo_id
         self.revision = revision if revision else CODEBASE_VERSION
-        self.root = Path(root) if root is not None else HF_LEROBOT_HOME / repo_id
+        self.root = LeRobotDatasetMetadata.resolve_root(repo_id, root)
 
         try:
             if force_cache_sync:
@@ -349,6 +349,14 @@ class LeRobotDatasetMetadata:
         write_json(obj.info, obj.root / INFO_PATH)
         obj.revision = None
         return obj
+
+    @staticmethod
+    def resolve_root(cls, repo_id: str, root: str | Path | None) -> Path:
+        """Resolve the root directory path for the dataset."""
+        if root is None:
+            return HF_LEROBOT_HOME / repo_id
+        else:
+            return Path(root)
 
 
 class LeRobotDataset(torch.utils.data.Dataset):

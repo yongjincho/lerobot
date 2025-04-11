@@ -260,7 +260,7 @@ def record(
         sanity_check_dataset_robot_compatibility(dataset, robot, cfg.fps, cfg.video)
     else:
         # Create empty dataset or load existing saved episodes
-        sanity_check_dataset_name(cfg.repo_id, cfg.policy)
+        sanity_check_dataset_name(cfg.repo_id, cfg.root, cfg.policy)
         dataset = LeRobotDataset.create(
             cfg.repo_id,
             cfg.fps,
