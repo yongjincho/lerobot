@@ -30,7 +30,7 @@ from deepdiff import DeepDiff
 from termcolor import colored
 
 from lerobot.common.datasets.image_writer import safe_stop_image_writer
-from lerobot.common.datasets.lerobot_dataset import LeRobotDataset
+from lerobot.common.datasets.lerobot_dataset import LeRobotDataset, LeRobotDatasetMetadata
 from lerobot.common.datasets.utils import get_features_from_robot
 from lerobot.common.policies.pretrained import PreTrainedPolicy
 from lerobot.common.robot_devices.robots.utils import Robot
@@ -308,10 +308,11 @@ def stop_recording(robot, listener, display_data):
         listener.stop()
 
 
-def sanity_check_dataset_name(repo_id, policy_cfg):
-    _, dataset_name = repo_id.split("/")
-    # either repo_id doesnt start with "eval_" and there is no policy
-    # or repo_id starts with "eval_" and there is a policy
+def sanity_check_dataset_name(repo_id, root, policy_cfg):
+    root = LeRobotDatasetMetadata.get_dataset_root_path(repo_id, root)
+    dataset_name = root.name
+    # either dataset_name doesnt start with "eval_" and there is no policy
+    # or dataset_name starts with "eval_" and there is a policy
 
     # Check if dataset_name starts with "eval_" but policy is missing
     if dataset_name.startswith("eval_") and policy_cfg is None:
